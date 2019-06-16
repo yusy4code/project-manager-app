@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema(
   {
-    userID: {
+    userId: {
       type: Number
     },
     firstName: {
@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema(
     lastName: {
       type: String
     },
-    employeeID: {
+    employeeId: {
       type: Number
     }
   },
