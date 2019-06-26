@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const moment = require('moment');
 
 const Project = require("../models/project");
 
@@ -28,6 +29,38 @@ router.get("/:projectid", (req, res) => {
         res.json({ success: false, message: "Project Not found" });
       }
     }
+  });
+});
+
+router.put("/suspend/:projectid", (req, res) => {
+  let projectid = parseInt(req.params.projectid);
+  let query = { projectId: projectid };
+  
+  let today = moment().format("YYYY-MM-DD");
+  let updatedData = {status: "completed", endDate: today};
+
+  Project.updateOne(query, updatedData, (err, data) => {
+    if (err) return res.json({ success: false, message: "Project Not Found" });
+    res.json({ success: true, message: "Project suspended successfully" });
+  });
+});
+
+router.put("/:projectid", (req, res) => {
+  let projectid = parseInt(req.params.projectid);
+  let query = { projectId: projectid };
+
+  // Any of the 5 field could be updated from front end
+  let updatedData = {
+          title: req.body.title,
+          projectManager: req.body.projectManager,
+          priority: req.body.priority,
+          startDate: req.body.startDate,
+          endDate: req.body.endDate
+        };
+
+  Project.updateOne(query, updatedData, (err, data) => {
+    if (err) return res.json({success:false, message:"Project Not found"});
+    res.json({success:true, message:"Project updated successfully"});
   });
 });
 
