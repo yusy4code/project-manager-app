@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const projectSchema = mongoose.Schema(
   {
+    projectId: {
+      type:Number
+    },
     title: {
       type: String
     },
