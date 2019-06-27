@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/users");
 const parentTaskRoutes = require("./routes/parenttasks");
 const projectRoute = require("./routes/projects");
+const taskRoute = require("./routes/tasks");
 
 const app = express();
 const port = 3000;
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use("/users", userRoutes);
 app.use("/parenttasks", parentTaskRoutes);
 app.use("/projects", projectRoute);
+app.use("/tasks", taskRoute);
 
 // Connecting MongoDB
 const db = "mongodb://localhost:27017/project-manager";
