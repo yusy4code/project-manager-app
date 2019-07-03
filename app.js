@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 
 // Bringing Routes
 const userRoutes = require("./routes/users");
-const parentTaskRoutes = require("./routes/parenttasks");
 const projectRoute = require("./routes/projects");
 const taskRoute = require("./routes/tasks");
 
@@ -16,7 +15,6 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/users", userRoutes);
-app.use("/parenttasks", parentTaskRoutes);
 app.use("/projects", projectRoute);
 app.use("/tasks", taskRoute);
 

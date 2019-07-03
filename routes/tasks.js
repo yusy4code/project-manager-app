@@ -82,7 +82,7 @@ router.post("/new", (req, res) => {
           var taskid = data.taskId + 1;
         }
 
-        console.log(req.body, taskid);
+        //console.log(req.body, taskid);
 
         let task_obj = {
           taskId: taskid,
@@ -107,46 +107,5 @@ router.post("/new", (req, res) => {
       }
     });
 });
-
-
-
-/*
-router.put("/:userid", (req, res) => {
-  let user_id = parseInt(req.params.userid);
-  let query = { userId: user_id };
-
-  let userObj = {
-    userId: user_id,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    employeeId: req.body.employeeId
-  };
-
-  User.findOneAndUpdate(query, userObj, (err, data) => {
-    if (err) {
-      return res.json({ success: false, message: "User Not Found" });
-    } else {
-      res.json({ success: true, message: "User updated successfully" });  
-    }
-  });
-});
-
-*/
-
-/* 
-router.delete("/:userid", (req, res) => {
-  
-  let user_id = parseInt(req.params.userid);
-  let query = { userId: user_id};
-  User.deleteOne(query, err => {
-    if (err) {
-      return res.json({success:false, message:"User Not Found"});
-    }
-    else {
-      res.json({ success: true, message: "User deleted successfully" });
-    }
-  })
-});
-*/
 
 module.exports = router;
