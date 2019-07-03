@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const moment = require('moment');
 
 const Task = require("../models/task");
+
 
 router.get("/", (req, res) => {
   Task.find({}, (err, data) => {
@@ -14,24 +16,59 @@ router.get("/", (req, res) => {
   });
 });
 
-/*
-router.get("/:userid", (req, res) => {
-  let userid = parseInt(req.params.userid);
-  let query = { userID: userid };
 
-  User.find(query, (err, data) => {
+router.put("/:id", (req, res) => {
+  let task_id = parseInt(req.params.id);
+  let query = { taskId: task_id };
+
+  let taskObj = {
+    taskId: task_id,
+    projectTitle: req.body.projectTitle,
+    taskName: req.body.taskName,
+    parentTask: req.body.parentTask,
+    priority: req.body.priority,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    assignedTo: req.body.assignedTo,
+    isCompleted: false
+  };
+
+
+  Task.findOneAndUpdate(query, taskObj, (err, data) => {
+    if (err) return res.json({ success: false, message: "Task Not Found" });
+    res.json({ success: true, message: "Task saved successfully" });
+  });
+});
+
+router.get("/:taskid", (req, res) => {
+  let taskid = parseInt(req.params.taskid);
+  let query = { taskId: taskid };
+
+  Task.find(query, (err, data) => {
     if (err) {
       res.json({ success: false, message: "Error while getting records" });
     } else {
       if (data.length > 0) {
         res.json({ success: true, data: data });
       } else {
-        res.json({ success: false, message: "User Not found" });
+        res.json({ success: false, message: "Task Not found" });
       }
     }
   });
 });
-*/
+
+router.put("/end/:id", (req, res) => {
+  let task_id = parseInt(req.params.id);
+  let query = { taskId: task_id };
+  
+  let today = moment().format("YYYY-MM-DD");
+  let updatedData = {isCompleted: true, endDate: today};
+  console.log
+  Task.updateOne(query, updatedData, (err, data) => {
+    if (err) return res.json({ success: false, message: "Task Not Found" });
+    res.json({ success: true, message: "Task ended successfully" });
+  });
+});
 
 router.post("/new", (req, res) => {
   Task.findOne()

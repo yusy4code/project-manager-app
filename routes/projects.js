@@ -3,15 +3,53 @@ const router = express.Router();
 const moment = require('moment');
 
 const Project = require("../models/project");
+const Task = require("../models/task");
+
+router.get("/all", (req, res) => {
+
+  Project.aggregate([
+    {
+      $lookup:
+      {
+        from:'task',
+        localField: 'title',
+        foreignField: 'projectTitle',
+        as: 'projDetails'
+      }
+    },
+    {
+      "$project":{ title: "$title", noOfTask: {$size: "$projDetails"}}
+    }
+    ]).exec((err, data) => {
+      console.log(data);
+      res.json({success:'done'});
+    });
+
+  //Project.find({}, (err, data) => {
+  //  if (err)
+  //    return res.json({
+  //      success: false,
+  //      message: "Error while getting records"
+  //    });
+  //  else res.json({success:true, data:data});
+  //});
+});
 
 router.get("/", (req, res) => {
+  var result;
   Project.find({}, (err, data) => {
-    if (err)
-      return res.json({
-        success: false,
-        message: "Error while getting records"
+    if (err) return res.json({success:false});
+    result = data;
+    data.forEach((d,i) => {
+      query = { projectTitle: d['title']};
+      //console.log(query);
+      Task.find(query, (err, taskData) => {
+        result[i]._doc.noOfTask = taskData.length;
+        if (i == result.length-1) {
+          res.json({success:true, data:result});
+        }
       });
-    else res.json({success:true, data:data});
+    });
   });
 });
 
@@ -76,7 +114,7 @@ router.post("/new", (req, res) => {
           var projectid = data.projectId + 1;
         }
 
-        console.log(req.body, projectid);
+        //console.log(req.body, projectid);
 
         let project_obj = {
           projectId: projectid,
@@ -90,7 +128,7 @@ router.post("/new", (req, res) => {
 
         Project.create(project_obj, err => {
           if (err) {
-            console.log(project_obj);
+            //console.log(project_obj);
             console.log(err);
             return res.json({ success: false, message: "Project not created" });
           }
