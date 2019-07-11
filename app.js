@@ -19,7 +19,8 @@ app.use("/projects", projectRoute);
 app.use("/tasks", taskRoute);
 
 // Connecting MongoDB
-const db = "mongodb://localhost:27017/project-manager";
+const db = "mongodb://mongo:27017/project-manager";
+//const db = "mongodb://localhost:27017/project-manager";
 mongoose.connect(db, { useNewUrlParser: true, useFindAndModify: false });
 
 mongoose.connection.on("connected", () => {
